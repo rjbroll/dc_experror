@@ -3,7 +3,7 @@
 %% 1. Simulate Data
 
 % Set seed
-rng(16);
+% rng(16);
 
 % Simulate data
 [X,I,Z,U,Xstar,Y] = simdata(100000,[.1 .4 .6 .9],0,1);
@@ -35,16 +35,16 @@ end
 xgrid = -z:xstepsize:1-z;
 resultsgrid = zeros(length(thetagrid),length(phigrid));
 
-for i = 1:length(thetagrid)
-    for j = 1:length(phigrid)
-        a = squeeze(agrid(i,j,:));
-        sup = zeros(length(xgrid),1);
-        for k = 1:length(xgrid)
-            sup(k) = a'*(F(z,xgrid(k),alphatest,betatest) - cz);
-        end
-        resultsgrid(i,j) = max(sup) >= 0;
-    end
-end
+% for i = 1:length(thetagrid)
+%     for j = 1:length(phigrid)
+%         a = squeeze(agrid(i,j,:));
+%         sup = zeros(length(xgrid),1);
+%         for k = 1:length(xgrid)
+%             sup(k) = a'*(F(z,xgrid(k),alphatest,betatest) - cz);
+%         end
+%         resultsgrid(i,j) = max(sup) >= 0;
+%     end
+% end
 
 
 %% test
