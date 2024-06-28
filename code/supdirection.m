@@ -1,23 +1,4 @@
-%%%%%% Sharp ID set %%%%%%
-
-%% 1. Simulate Data
-
-% Set seed
-% rng(16);
-
-% Simulate data
-[X,I,Z,U,Xstar,Y] = simdata(10000000,[.1 .4 .6 .9],0,1);
-
-%% 2. Sup x \in [-znorm, 1-znorm]
-alphatest = .01;
-betatest = .98;
-
-% parameters
-xstepsize = .05;
-thetastepsize = .2;
-phistepsize = .2;
-
-
+function result = supdirection(alphatest,betatest,thetastepsize,phistepsize,xstepsize,znorm,cz)
 % Create directional grids
 thetagrid = 0:thetastepsize:(pi);
 phigrid = 0:phistepsize:(2*pi);
@@ -29,17 +10,13 @@ for i = 1:length(thetagrid)
         agrid(i,j,3) = cos(thetagrid(i));
     end
 end
-resultsgrid = zeros(length(thetagrid),length(phigrid));
 
-% Create c_z
-z = 0;
-znorm = mean(X(Z==z));
-cz = c(X,Y,Z,z,znorm);
-    % create xgrid
+% create xgrid
 xgrid = -znorm:xstepsize:1-znorm;
 
-
 % Check sup condition for all directions a
+resultsgrid = zeros(length(thetagrid),length(phigrid));
+
 for i = 1:length(thetagrid)
     for j = 1:length(phigrid)
         a = squeeze(agrid(i,j,:));
@@ -51,16 +28,4 @@ for i = 1:length(thetagrid)
     end
 end
 
-
-%% test
-% test = squeeze(agrid(10,54,:));
-% sup = zeros(length(xgrid),1);
-% for k = 1:length(xgrid)
-%     sup(k) = test'* (F(znorm,xgrid(k),alphatest,betatest) - cz);
-% end
-% plot(xgrid,sup);
-% 
-% test2 = F(znorm,0,alphatest,betatest) - cz;
-
-    
-
+result = all(resultsgrid, 'all');

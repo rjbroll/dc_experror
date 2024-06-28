@@ -33,9 +33,9 @@ h.XLabel = 'alpha';
 %% 3. Compute Bounding-based ID set
 
 % Simulate data - larger sample size needed for precision
-alpha = -6;
-beta = 3;
-[X,I,Z,U,Xstar,Y] = simdata(100000,[.1 .4 .6 .9],alpha,beta);
+alpha = -10;
+beta = 1;
+[X,I,Z,U,Xstar,Y] = simdata(10000000,[.1 .4 .6 .9],alpha,beta);
 meanvec = zeros(4,1);
 meanvec(1) = mean(X(Z==0 & Y==0));
 meanvec(2) = mean(X(Z==1 & Y==0));
@@ -43,8 +43,8 @@ meanvec(3) = mean(X(Z==0 & Y==1));
 meanvec(4) = mean(X(Z==1 & Y==1));
 
 % Compute ID set
-alphagrid = alpha-.3:.01:alpha+.3;
-betagrid = beta+.4:-.01:beta-.35;
+alphagrid = alpha-.03:.01:alpha+.03;
+betagrid = beta+.03:-.01:beta-.03;
 resultsgrid_bound = zeros(length(betagrid),length(alphagrid));
 for i = 1:length(betagrid)
     for j = 1:length(alphagrid)
