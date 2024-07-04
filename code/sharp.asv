@@ -3,53 +3,46 @@
 %% 1. Simulate Data
 
 % Set seed
-% rng(16);
+rng(16);
+
+alpha = 0;
+beta = 2;
 
 % Simulate data
-[X,I,Z,U,Xstar,Y] = simdata(10000000,[.1 .4 .6 .9],0,1);
+[X,I,Z,U,Xstar,Y] = simdata(1000000,[.1 .4 .6 .9],alpha,beta);
 
 %% 2. Sup x \in [-znorm, 1-znorm]
-alphatest = .01;
-betatest = .98;
-
 % parameters
-xstepsize = .05;
+xstepsize = .2;
 thetastepsize = .2;
 phistepsize = .2;
 
-
-% Create directional grids
-thetagrid = 0:thetastepsize:(pi);
-phigrid = 0:phistepsize:(2*pi);
-agrid = zeros(length(thetagrid),length(phigrid),3);
-for i = 1:length(thetagrid)
-    for j = 1:length(phigrid)
-        agrid(i,j,1) = sin(thetagrid(i))*cos(phigrid(j));
-        agrid(i,j,2) = sin(thetagrid(i))*sin(phigrid(j));
-        agrid(i,j,3) = cos(thetagrid(i));
-    end
-end
-resultsgrid = zeros(length(thetagrid),length(phigrid));
-
-% Create c_z
-z = 0;
-znorm = mean(X(Z==z));
-cz = c(X,Y,Z,z,znorm);
-    % create xgrid
-xgrid = -znorm:xstepsize:1-znorm;
-
-
-% Check sup condition for all directions a
-for i = 1:length(thetagrid)
-    for j = 1:length(phigrid)
-        a = squeeze(agrid(i,j,:));
-        sup = zeros(length(xgrid),1);
-        for k = 1:length(xgrid)
-            sup(k) = a'*(F(znorm,xgrid(k),alphatest,betatest) - cz);
+% Set parameter grid
+alphagrid = alpha - .1:.02:alpha + .1;
+betagrid = beta + .2:-.04:beta - .16;
+paramgrid = zeros(length(betagrid),length(alphagrid));
+for i = 1:length(betagrid)
+    for j = 1:length(alphagrid)
+        resultz = zeros(2,1);
+        for zval=0:1
+            % Create c_z
+            z = zval;
+            znorm = mean(X(Z==z));
+            cz = c(X,Y,Z,z,znorm);
+            % Create result
+            resultz(zval+1) = supdirection(alphagrid(j),betagrid(i),thetastepsize,phistepsize,xstepsize,znorm,cz);
         end
-        resultsgrid(i,j) = max(sup) >= 0;
+        paramgrid(i,j) = all(resultz);
     end
 end
+
+% move z outside of paramloop?
+
+
+%% plot sharp ID set
+hsharp=heatmap(alphagrid,betagrid,paramgrid);
+hsharp.YLabel = 'beta';
+hsharp.XLabel = 'alpha';
 
 
 %% test

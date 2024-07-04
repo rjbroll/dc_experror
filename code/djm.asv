@@ -5,12 +5,16 @@
 % Set seed
 rng(16);
 
+% Set alpha and beta
+alpha = 0;
+beta = 2;
+
 % Simulate data
-[X,I,Z,U,Xstar,Y] = simdata(100000,[.1 .4 .6 .9],.5,-.2);
+[X,I,Z,U,Xstar,Y] = simdata(100000,[.1 .4 .6 .9],alpha,beta);
 
 %% 2. Compute Odds-based ID set
-alphagrid = -1.5:.1:1.5;
-betagrid = 4:-.1:-2;
+alphagrid = alpha-.3:.01:alpha+.3;
+betagrid = beta+.4:-.01:beta-.35;
 resultsgrid_odds = zeros(length(betagrid),length(alphagrid));
 for i = 1:length(betagrid)
     for j = 1:length(alphagrid)
@@ -33,9 +37,9 @@ h.XLabel = 'alpha';
 %% 3. Compute Bounding-based ID set
 
 % Simulate data - larger sample size needed for precision
-alpha = -10;
-beta = 1;
-[X,I,Z,U,Xstar,Y] = simdata(10000000,[.1 .4 .6 .9],alpha,beta);
+alpha = 0;
+beta = 2;
+[X,I,Z,U,Xstar,Y] = simdata(100000,[.1 .4 .6 .9],alpha,beta);
 meanvec = zeros(4,1);
 meanvec(1) = mean(X(Z==0 & Y==0));
 meanvec(2) = mean(X(Z==1 & Y==0));
@@ -43,8 +47,8 @@ meanvec(3) = mean(X(Z==0 & Y==1));
 meanvec(4) = mean(X(Z==1 & Y==1));
 
 % Compute ID set
-alphagrid = alpha-.03:.01:alpha+.03;
-betagrid = beta+.03:-.01:beta-.03;
+alphagrid = alpha-.3:.01:alpha+.3;
+betagrid = beta+.4:-.01:beta-.35;
 resultsgrid_bound = zeros(length(betagrid),length(alphagrid));
 for i = 1:length(betagrid)
     for j = 1:length(alphagrid)
