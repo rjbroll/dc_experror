@@ -15,30 +15,52 @@ beta = 2;
 %% 2. Compute Sharp ID set
 % parameters
 xstepsize = .2;
-thetastepsize = .1;
-phistepsize = .1;
+thetastepsize = .2;
+phistepsize = .2;
 
-% Set parameter grid
-alphagrid = alpha - .01:.01:alpha + .01;
-betagrid = beta + .02:-.02:beta - .02;
-paramgrid = zeros(length(betagrid),length(alphagrid),2);
-
-% Iterate through alpha and beta for both Z=0 and Z=1 and check sup
-% condition
-for zval=0:1    
-    % Create c_z
-    znorm = mean(X(Z==zval));
-    cz = c(X,Y,Z,zval,znorm);
-    for i = 1:length(betagrid)
-        for j = 1:length(alphagrid)
-            % Create result
-            paramgrid(i,j,zval+1) = supdirection(alphagrid(j),betagrid(i),thetastepsize,phistepsize,xstepsize,znorm,cz);
-            disp(j)
-        end
+% Create directional grids
+thetagrid = 0:thetastepsize:(pi);
+phigrid = 0:phistepsize:(2*pi);
+agrid = zeros(length(thetagrid),length(phigrid),3);
+for i = 1:length(thetagrid)
+    for j = 1:length(phigrid)
+        agrid(i,j,1) = sin(thetagrid(i))*cos(phigrid(j));
+        agrid(i,j,2) = sin(thetagrid(i))*sin(phigrid(j));
+        agrid(i,j,3) = cos(thetagrid(i));
     end
 end
 
-% Collapse 
+% Set parameter grid
+alphagrid = alpha - .02:.02:alpha + .02;
+betagrid = beta + .04:-.04:beta - .04;
+paramgrid = ones(length(betagrid),length(alphagrid));
+
+% Iterate through alpha and beta for both Z=0 and Z=1 and check sup
+% condition
+znorm = zeros(2,1);
+znorm(1) = mean(X(Z==0));
+znorm(2) = mean(X(Z==1));
+cz = zeros(2,1);
+cz(1) = c(X,Y,Z,0,znorm(1));
+cz(2) = C(X,Y,Z,1,znorm(2));
+for i = 1:length(betagrid)
+    for j = 1:length(alphagrid)
+        for zval=0:1    
+            % Create c_z
+            znorm = mean(X(Z==zval));
+            cz = c(X,Y,Z,zval,znorm);
+            % Create result
+            s = supdirection(alphagrid(j),betagrid(i),thetagrid,phigrid,agrid,xstepsize,znorm,cz);
+            if s == 0
+                paramgrid(i,j) = 0;
+                break
+            end
+        end
+        disp(j);
+    end
+end
+
+% Collapse over z values
 graphgrid = zeros(length(betagrid),length(alphagrid));
 for i = 1:length(betagrid)
     for j = 1:length(alphagrid)
@@ -46,9 +68,6 @@ for i = 1:length(betagrid)
     end
 end
 
-% Ideas to speed up code
-% - move z outside of paramloop
-% - move setting up directional grids outside function
 
 
 

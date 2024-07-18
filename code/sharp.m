@@ -33,28 +33,32 @@ end
 % Set parameter grid
 alphagrid = alpha - .02:.02:alpha + .02;
 betagrid = beta + .04:-.04:beta - .04;
-paramgrid = zeros(length(betagrid),length(alphagrid),2);
+paramgrid = ones(length(betagrid),length(alphagrid));
+
+% Set up znorm and cz values for Z = 0,1
+znormvec = zeros(2,1);
+znormvec(1) = mean(X(Z==0));
+znormvec(2) = mean(X(Z==1));
+czvec = zeros(3,2);
+czvec(:,1) = c(X,Y,Z,0,znormvec(1));
+czvec(:,2) = c(X,Y,Z,1,znormvec(2));
 
 % Iterate through alpha and beta for both Z=0 and Z=1 and check sup
 % condition
-for zval=0:1    
-    % Create c_z
-    znorm = mean(X(Z==zval));
-    cz = c(X,Y,Z,zval,znorm);
-    for i = 1:length(betagrid)
-        for j = 1:length(alphagrid)
-            % Create result
-            paramgrid(i,j,zval+1) = supdirection(alphagrid(j),betagrid(i),thetagrid,phigrid,agrid,xstepsize,znorm,cz);
-            disp(j)
-        end
-    end
-end
-
-% Collapse over z values
-graphgrid = zeros(length(betagrid),length(alphagrid));
 for i = 1:length(betagrid)
     for j = 1:length(alphagrid)
-        graphgrid(i,j) = all(paramgrid(i,j,:));
+        for zval=0:1    
+            % Create c_z
+            znorm = znormvec(zval+1);
+            cz = czvec(:,zval+1);
+            % Create result
+            s = supdirection(alphagrid(j),betagrid(i),thetagrid,phigrid,agrid,xstepsize,znorm,cz);
+            if s == 0
+                paramgrid(i,j) = 0;
+                break
+            end
+        end
+        disp(j);
     end
 end
 
@@ -62,7 +66,7 @@ end
 
 
 %% plot sharp ID set
-hsharp=heatmap(alphagrid,betagrid,graphgrid);
+hsharp=heatmap(alphagrid,betagrid,paramgrid);
 hsharp.YLabel = 'beta';
 hsharp.XLabel = 'alpha';
 
