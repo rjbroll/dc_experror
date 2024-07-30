@@ -10,7 +10,6 @@ e1 = F(znorm,xgrid(end),alphatest,betatest) - cz;
 result = 1;
 
 for i = 1:length(thetagrid)
-    sup = [0 0]; % ?????
     for j = 1:length(phigrid)
         a = squeeze(agrid(i,j,:));
         if a'*e0 >= 0 || a'*e1 >=0
@@ -19,13 +18,18 @@ for i = 1:length(thetagrid)
         sup = zeros(length(xgrid),1);
         for k = 1:length(xgrid)
             sup(k) = a'*(F(znorm,xgrid(k),alphatest,betatest) - cz);
+            if sup(k) >= 0
+                break
+            end
+            if k == length(xgrid)
+                result = 0;
+            end
         end
-        if max(sup) < 0 % maybe move this inside the k for loop
-            result = 0;
+        if result == 0
             break
         end
     end
-    if max(sup) < 0
+    if result == 0
         break
     end
 end
