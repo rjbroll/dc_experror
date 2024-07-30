@@ -14,25 +14,25 @@ beta = 2;
 
 %% 2. Compute Sharp ID set
 % parameters
-xstepsize = .2;
-thetastepsize = .2;
-phistepsize = .2;
+xstepsize = .05;
+thetastepsize = .05;
+phistepsize = .05;
 
 % Create directional grids
-thetagrid = 0:thetastepsize:(pi);
-phigrid = 0:phistepsize:(2*pi);
+thetagrid = -(pi)/2:thetastepsize:(pi)/2;
+phigrid = -(pi):phistepsize:(pi);
 agrid = zeros(length(thetagrid),length(phigrid),3);
 for i = 1:length(thetagrid)
     for j = 1:length(phigrid)
-        agrid(i,j,1) = sin(thetagrid(i))*cos(phigrid(j));
-        agrid(i,j,2) = sin(thetagrid(i))*sin(phigrid(j));
-        agrid(i,j,3) = cos(thetagrid(i));
+        agrid(i,j,1) = cos(thetagrid(i))*cos(phigrid(j)); % x-coordinate
+        agrid(i,j,2) = cos(thetagrid(i))*sin(phigrid(j)); % y-coordinate
+        agrid(i,j,3) = sin(thetagrid(i)); % z-coordinate
     end
 end
 
 % Set parameter grid
-alphagrid = alpha - .02:.02:alpha + .02;
-betagrid = beta + .04:-.04:beta - .04;
+alphagrid = alpha - .02:.01:alpha + .02;
+betagrid = beta + .04:-.01:beta - .04;
 paramgrid = ones(length(betagrid),length(alphagrid));
 
 % Set up znorm and cz values for Z = 0,1

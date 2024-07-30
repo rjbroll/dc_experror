@@ -1,18 +1,10 @@
 function result = supdirection(alphatest,betatest,thetagrid,phigrid,agrid,xstepsize,znorm,cz)
-% % Create directional grids
-% thetagrid = 0:thetastepsize:(pi);
-% phigrid = 0:phistepsize:(2*pi);
-% agrid = zeros(length(thetagrid),length(phigrid),3);
-% for i = 1:length(thetagrid)
-%     for j = 1:length(phigrid)
-%         agrid(i,j,1) = sin(thetagrid(i))*cos(phigrid(j));
-%         agrid(i,j,2) = sin(thetagrid(i))*sin(phigrid(j));
-%         agrid(i,j,3) = cos(thetagrid(i));
-%     end
-% end
-
 % create xgrid
 xgrid = -znorm:xstepsize:1-znorm;
+
+% Set endpoints
+e0 = F(znorm,xgrid(1),alphatest,betatest) - cz;
+e1 = F(znorm,xgrid(end),alphatest,betatest) - cz;
 
 % Check sup condition for all directions a
 result = 1;
@@ -20,28 +12,23 @@ result = 1;
 for i = 1:length(thetagrid)
     for j = 1:length(phigrid)
         a = squeeze(agrid(i,j,:));
+        if a'*e0 >= 0 | a'*e1 >=0
+            continue
+        end
         sup = zeros(length(xgrid),1);
         for k = 1:length(xgrid)
             sup(k) = a'*(F(znorm,xgrid(k),alphatest,betatest) - cz);
         end
-        resultsgrid(i,j) = max(sup) >= 0;
+        if max(sup) < 0
+            result = 0;
+            break
+        end
+    end
+    if max(sup) < 0
+        break
     end
 end
 
-result = all(resultsgrid, 'all');
 
-% % Check sup condition for all directions a
-% resultsgrid = zeros(length(thetagrid),length(phigrid));
-% 
-% for i = 1:length(thetagrid)
-%     for j = 1:length(phigrid)
-%         a = squeeze(agrid(i,j,:));
-%         sup = zeros(length(xgrid),1);
-%         for k = 1:length(xgrid)
-%             sup(k) = a'*(F(znorm,xgrid(k),alphatest,betatest) - cz);
-%         end
-%         resultsgrid(i,j) = max(sup) >= 0;
-%     end
-% end
-% 
-% result = all(resultsgrid, 'all');
+
+
