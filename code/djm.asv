@@ -10,7 +10,7 @@ alpha = 0;
 beta = 2;
 
 % Simulate data
-[X,I,Z,U,Xstar,Y] = simdata(1000000,[.1 .4 .6 .9],alpha,beta);
+[X,I,Z,U,Xstar,Y] = simdata(50000000,[.1 .4 .6 .9],alpha,beta);
 
 % Set test-value grid
 alphagrid = alpha - .4:.05:alpha + .4;
@@ -89,12 +89,10 @@ end
 hoverlay = heatmap(alphagrid,betagrid,resultsgrid_overlay);
 hoverlay.YLabel = 'beta';
 hoverlay.XLabel = 'alpha';
-hoverlay.Title = 'Light = None, Medium = Odds, Dark = Bounding+Odds';
-hoverlay.ColorbarVisible = 0;
-hoverlay.CellLabelColor = "none";
+hoverlay.Title = 'Light = None, Medium = Bounding, Dark = Both';
 
 %% Test
-test = odds(X,Y,Z,-.15,2.4);
+test = mean(Y(Z==0));
 
 
 
