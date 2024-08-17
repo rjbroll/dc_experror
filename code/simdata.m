@@ -1,5 +1,7 @@
 function [X,I,Z,U,Xstar,Y] = simdata(N, meanx, alpha, beta)
 
+% Note: can only change meanx. The rest of the code is sensitive
+% to prob distribution of I, for instance.
 % Create X and I
 Xp = rand(N,1) <= meanx;
 I = ceil(rand(N,1)*4);
@@ -23,3 +25,5 @@ end
 
 % Create Y
 Y = alpha + beta*Xstar - U >= 0;
+
+end
