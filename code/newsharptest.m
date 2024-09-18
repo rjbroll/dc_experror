@@ -13,8 +13,8 @@ meanx = [.1 .4 .6 .9];
 %% 2. Compute Sharp ID set
 
 % Set parameter grid
-alphagrid = alpha - .04:.005:alpha + .04;
-betagrid = beta + .06:-.005:beta - .06;
+alphagrid = alpha - .02:.01:alpha + .04;
+betagrid = beta + .02:-.01:beta - .1;
 paramgrid = ones(length(betagrid),length(alphagrid));
 
 % Set up znorm and cz values for Z = 0,1
@@ -24,6 +24,8 @@ znormvec(2) = mean(meanx(3:4));
 czvec = zeros(3,2);
 czvec(:,1) = c(meanx, alpha, beta, 0);
 czvec(:,2) = c(meanx, alpha, beta, 1);
+
+%%
 
 % Iterate through alpha and beta for both Z=0 and Z=1 and check sup
 % condition

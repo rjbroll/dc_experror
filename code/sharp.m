@@ -7,7 +7,7 @@ rng(16);
 
 % Set true parameter values
 alpha = 0;
-beta = 0;
+beta = 2;
 
 % Simulate data
 meanx = [.1 .4 .6 .9];
@@ -15,7 +15,7 @@ meanx = [.1 .4 .6 .9];
 
 %% 2. Compute Sharp ID set
 % parameters
-xstepsize = .02; % Problem - these still matter
+xstepsize = .2; % Problem - these still matter
 thetastepsize = .05;
 phistepsize = .05;
 
@@ -33,8 +33,8 @@ end
 
 %%
 % Set parameter grid
-alphagrid = alpha - .005:.001:alpha + .005;
-betagrid = beta + .005:-.001:beta - .005;
+alphagrid = alpha - .02:.01:alpha + .02;
+betagrid = beta + .05:-.01:beta - .1;
 paramgrid = ones(length(betagrid),length(alphagrid));
 %%
 
@@ -45,7 +45,7 @@ znormvec(2) = mean(meanx(3:4));
 czvec = zeros(3,2);
 czvec(:,1) = c(meanx, alpha, beta, 0);
 czvec(:,2) = c(meanx, alpha, beta, 1);
-
+%%
 % Iterate through alpha and beta for both Z=0 and Z=1 and check sup
 % condition
 for i = 1:length(betagrid)
