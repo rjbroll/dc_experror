@@ -1,5 +1,5 @@
 function c = c(meanx, alpha, beta, z)
-    % xtar and znorm
+    % xstar and znorm
     if z == 0
         xstar = meanx(1:2);
     end
