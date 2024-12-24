@@ -4,7 +4,7 @@
 alpha = 0;
 beta = 2;
 m_z = .25;
-N = 10000;
+N = 50000;
 
 % Draw random pairs of points on each side of Y-Z plane
 r0 = m_z.*rand(N,2) - m_z; % X coordinate < 0
@@ -30,8 +30,40 @@ for i = 1:N
     d(i,:) = w.*c0(i,:) + (1-w).*c1(i,:);
 end
 
-%%
-scatter(d(:,2), d(:,3))
+
+%% Analytic
+
+
+a0=zeros(101,2);
+for i=0:100
+    t0 = ana_trace0(i/400 - .25,alpha,beta,m_z);
+    a0(i+1,:) = t0(2:3)';
+end
+a1 = zeros(103,2);
+for i = 0:102
+    t1 = ana_trace1(.75-(i/136),alpha,beta,m_z);
+    a1(i+1,:) = t1(2:3)';
+end
+
+%% plot
+scatter(d(:,2), d(:,3),MarkerEdgeColor="blue")
+hold on
+scatter(a0(:,1),a0(:,2),MarkerEdgeColor="red")
+scatter(a1(:,1),a1(:,2),MarkerEdgeColor="red")
+hold off
+
+
+
+%% functions
+function t0 = ana_trace0(u,alpha,beta,m_z)
+    w = .75/(.75-u);
+    t0 = w.*g_z(u,alpha,beta,m_z) + (1-w).*g_z(.75,alpha,beta,m_z);
+end
+
+function t1 = ana_trace1(u,alpha,beta,m_z)
+    w = u/(u+.25);
+    t1 = w.*g_z(-.25,alpha,beta,m_z) + (1-w).*g_z(u,alpha,beta,m_z);
+end
 
 
 
