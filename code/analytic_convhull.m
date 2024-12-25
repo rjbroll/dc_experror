@@ -48,20 +48,20 @@ end
 %% plot
 scatter(d(:,2), d(:,3),MarkerEdgeColor="blue")
 hold on
-scatter(a0(:,1),a0(:,2),MarkerEdgeColor="red")
-scatter(a1(:,1),a1(:,2),MarkerEdgeColor="red")
+scatter(a0(:,1),a0(:,2),MarkerEdgeColor="red",LineWidth=1)
+scatter(a1(:,1),a1(:,2),MarkerEdgeColor="red",LineWidth=1)
 hold off
 
 
 
 %% functions
 function t0 = ana_trace0(u,alpha,beta,m_z)
-    w = .75/(.75-u);
+    w = (1-m_z)/(1-m_z-u);
     t0 = w.*g_z(u,alpha,beta,m_z) + (1-w).*g_z(.75,alpha,beta,m_z);
 end
 
 function t1 = ana_trace1(u,alpha,beta,m_z)
-    w = u/(u+.25);
+    w = u/(u+m_z);
     t1 = w.*g_z(-.25,alpha,beta,m_z) + (1-w).*g_z(u,alpha,beta,m_z);
 end
 
