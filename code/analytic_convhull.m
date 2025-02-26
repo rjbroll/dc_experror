@@ -1,10 +1,10 @@
 %%%%%%%% Test analytic convex hull %%%%%%%%%%%
 
 % Set parameters
-alpha = 0;
+alpha = -1;
 beta = 2;
 m_z = .25;
-N = 50000;
+N = 1000;
 
 % Draw random pairs of points on each side of Y-Z plane
 r0 = m_z.*rand(N,2) - m_z; % X coordinate < 0
