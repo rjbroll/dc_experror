@@ -16,5 +16,5 @@ function c = c(meanx, alpha, beta, z)
     meanyx = (cdf('Logistic',alpha + beta*xstar(1))*xstar(1) ...
             + cdf('Logistic',alpha+beta*xstar(2))*xstar(2))/2;
 
-    c = [meany meanyx-meany*znorm 0]';
+    c = [meany meanyx-meany*znorm]';
 end
