@@ -8,7 +8,7 @@ function c = c(xstarsupport, w, alpha, beta, z)
         xstar = xstarsupport(3:4);
         w = w(2);
     end
-znorm = w*xstar(1) + (1-w)*xstar(2);
+znorm = (55/70)*xstar(1) + (15/70)*xstar(2);
 
 %     % meany
 %     meany = (cdf('Logistic',alpha + beta*xstar(1)) ...
@@ -21,8 +21,8 @@ znorm = w*xstar(1) + (1-w)*xstar(2);
 % meany = (1/(1+exp(-(alpha+beta*xstar(1)))) + 1/(1+exp(-(alpha+beta*xstar(2)))))/2;
 % meanyx = (xstar(1)/(1+exp(-(alpha+beta*xstar(1)))) + xstar(2)/(1+exp(-(alpha+beta*xstar(2)))))/2;
 
-meany = (w/(1+exp(-(alpha+beta*xstar(1))))) + ((1-w)/(1+exp(-(alpha+beta*xstar(2)))));
-meanyx = w*(xstar(1)/(1+exp(-(alpha+beta*xstar(1))))) + (1-w)*(xstar(2)/(1+exp(-(alpha+beta*xstar(2)))));
+meany = ((55/70)/(1+exp(-(alpha+beta*xstar(1))))) + ((15/70)/(1+exp(-(alpha+beta*xstar(2)))));
+meanyx = (55/70)*(xstar(1)/(1+exp(-(alpha+beta*xstar(1))))) + (15/70)*(xstar(2)/(1+exp(-(alpha+beta*xstar(2)))));
 
     c = [meany meanyx-meany*znorm]';
 end

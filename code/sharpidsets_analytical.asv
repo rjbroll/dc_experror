@@ -18,9 +18,9 @@ results = zeros(length(thetagrid),2);
 for i=1:length(thetagrid)
     theta = thetagrid(i);
     fundist = @(r) paramboundist(r,alpha0,beta0,theta,cmat,znorm,0);
-    results(i,1) = fzero(fundist, 0); % remember the .1 is ad hoc for now
+    results(i,1) = fzero(fundist, [0,.05]); % remember the .1 is ad hoc for now
     fundist = @(r) paramboundist(r,alpha0,beta0,theta,cmat,znorm,1);
-    results(i,2) = fzero(fundist, 0); % remember the .1 is ad hoc for now
+    results(i,2) = fzero(fundist, [0,1]); % remember the .1 is ad hoc for now
     disp(i);
 end
 
@@ -30,8 +30,8 @@ paramboundary = min(results,[],2);
 
 %%
 function dist = paramboundist(r, alpha0, beta0, theta, cmat, znorm, zval)
-    alpha = alpha0 + abs(r)*cos(theta);
-    beta = beta0 + abs(r)*sin(theta);
+    alpha = alpha0 + r*cos(theta);
+    beta = beta0 + r*sin(theta);
     % Calculate distance to edge of admissible moment set
     z=zval;
     tmin = min([-beta*znorm(z+1) beta*(1-znorm(z+1))]) ;
