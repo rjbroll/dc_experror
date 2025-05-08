@@ -1,12 +1,10 @@
 %% 1. Set DGP
 alpha0 = 0;
 beta0 = 1;
-agent_r2 = .6;
-econ_relr2 = .27;
-c_a = (1+sqrt(agent_r2))/2;
-c_e = (1+sqrt(econ_relr2))/2;
-w = [c_e c_e];
-xstarsupp = [c_a 1-c_a 1-c_a c_a];
+r = .51;
+p = .51;
+w = [r r];
+xstarsupp = [p 1-p 1-p p];
     % Calculate c for Z=0 and Z=1
 cmat = [c(xstarsupp,w,alpha0,beta0,0) c(xstarsupp,w,alpha0,beta0,1)];
     % Calculate znorm0 = E[X|Z=0] and znorm1 = E[X|Z=1]
@@ -28,9 +26,9 @@ for i=1:length(thetagrid)
     end
 end
 
+%% 3. Plot
 plotx = results .* cos(thetagrid') + alpha0;
 ploty = results .* sin(thetagrid') + beta0;
-scatter(plotx, ploty, 5,"MarkerEdgeColor","#A2142F")
 
 
 %% 4. Odds set
@@ -50,7 +48,7 @@ end
 oddsplotx = oddsresults .* cos(thetagrid') + alpha0;
 oddsploty = oddsresults .* sin(thetagrid') + beta0;
 
-scatter(oddsplotx, oddsploty, 5)
+
 
 %% 4. Bounding set
 boundsearchlimit = 10;
@@ -68,9 +66,22 @@ end
 boundplotx = boundresults .* cos(thetagrid') + alpha0;
 boundploty = boundresults .* sin(thetagrid') + beta0;
 
+%% sharpplot
+
+% scatter(boundplotx, boundploty,5)
+% hold on
+scatter(plotx, ploty, 5,"MarkerEdgeColor","#A2142F")
+% hold off
+
+
+%% oddsplot
+% scatter(oddsplotx, oddsploty, 5)
+
+%% boundplot
+% hold on
+% % boundsplot
 scatter(boundplotx,boundploty,5)
-
-
+% hold off
 
 
 
